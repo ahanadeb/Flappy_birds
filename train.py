@@ -13,7 +13,7 @@ def train():
     #    betas = (0.9, 0.999)
     #    random_seed = 543
 
-    render = False
+    render = True
     gamma = 0.99
     lr = 0.02
     betas = (0.9, 0.999)
@@ -21,10 +21,13 @@ def train():
     
     torch.manual_seed(random_seed)
     env = flappy_bird_gym.make("FlappyBird-v0")
+
+    print(env.action_space)
     #env = gym.make('LunarLander-v2')
     env.seed(random_seed)
     
     policy = ActorCritic()
+    print(policy)
     optimizer = optim.Adam(policy.parameters(), lr=lr, betas=betas)
     print(lr,betas)
     
@@ -32,12 +35,20 @@ def train():
     for i_episode in range(0, 10000):
         state = env.reset()
         for t in range(10000):
+            # print(state)
             action = policy(state)
-            state, reward, done, _ = env.step(action)
+            # print("action", env.step(action))
+            state, reward, done, info = env.step(action)
+            reward = 0.01 * t + 10 * info["score"]
+            if done:
+                reward = -1
             policy.rewards.append(reward)
+            if t>95:
+                print(t, reward, done)
             running_reward += reward
-            if render and i_episode > 1000:
+            if render and i_episode % 1000 < 10 and False:
                 env.render()
+                time.sleep(1/30)
             if done:
                 break
                     
@@ -52,7 +63,7 @@ def train():
         #if i_episode > 999:
         #    torch.save(policy.state_dict(), './preTrained/LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
         
-        if running_reward > 4000:
+        if running_reward > 400000:
             torch.save(policy.state_dict(), './preTrained/LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
             print("########## Solved! ##########")
             test(name='LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))

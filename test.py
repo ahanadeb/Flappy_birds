@@ -6,7 +6,7 @@ import flappy_bird_gym
 
 from PIL import Image
 
-def test(n_episodes=5, name='LunarLander_TWO.pth'):
+def test(n_episodes=5, name='LunarLander_0.02_0.9_0.999.pth'):
     env = flappy_bird_gym.make("FlappyBird-v0")
     #env = gym.make('LunarLander-v2')
     policy = ActorCritic()
@@ -25,6 +25,7 @@ def test(n_episodes=5, name='LunarLander_TWO.pth'):
             running_reward += reward
             if render:
                  env.render()
+                 time.sleep(1/30)
                  if save_gif:
                      img = env.render(mode = 'rgb_array')
                      img = Image.fromarray(img)
