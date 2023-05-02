@@ -64,7 +64,7 @@ def train():
         #    torch.save(policy.state_dict(), './preTrained/LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
         
         if running_reward > 400000:
-            torch.save(policy.state_dict(), './preTrained/LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
+            torch.save(policy.state_dict(), './preTrained/Flappy_bird_save.pth'.format(lr, betas[0], betas[1]))
             print("########## Solved! ##########")
             test(name='LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
             break
