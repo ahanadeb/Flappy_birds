@@ -6,7 +6,7 @@ import flappy_bird_gym
 
 from PIL import Image
 
-def test(n_episodes=5, name='LunarLander_0.02_0.9_0.999.pth'):
+def test(n_episodes=5, name='LunarLander_2023-05-02_18_03_16_632264.pth'):
     env = flappy_bird_gym.make("FlappyBird-v0")
     #env = gym.make('LunarLander-v2')
     policy = ActorCritic()
