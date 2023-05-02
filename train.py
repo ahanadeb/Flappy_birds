@@ -27,11 +27,12 @@ def train():
     policy = ActorCritic()
     optimizer = optim.Adam(policy.parameters(), lr=lr, betas=betas)
     print(lr,betas)
-    
+
     running_reward = 0
     for i_episode in range(0, 10000):
         state = env.reset()
         for t in range(10000):
+            #print("state", state)
             action = policy(state)
             state, reward, done, _ = env.step(action)
             policy.rewards.append(reward)

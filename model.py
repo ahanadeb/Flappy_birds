@@ -6,10 +6,10 @@ from torch.distributions import Categorical
 class ActorCritic(nn.Module):
     def __init__(self):
         super(ActorCritic, self).__init__()
-        self.affine = nn.Linear(8, 128)
+        self.affine = nn.Linear(2, 10)
         
-        self.action_layer = nn.Linear(128, 4)
-        self.value_layer = nn.Linear(128, 1)
+        self.action_layer = nn.Linear(10, 2)
+        self.value_layer = nn.Linear(10, 1)
         
         self.logprobs = []
         self.state_values = []
