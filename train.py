@@ -3,6 +3,8 @@ from model import ActorCritic
 import torch
 import torch.optim as optim
 import gym
+import time
+import flappy_bird_gym
 
 def train():
     # Defaults parameters:
@@ -18,8 +20,8 @@ def train():
     random_seed = 543
     
     torch.manual_seed(random_seed)
-    
-    env = gym.make('LunarLander-v2')
+    env = flappy_bird_gym.make("FlappyBird-v0")
+    #env = gym.make('LunarLander-v2')
     env.seed(random_seed)
     
     policy = ActorCritic()
