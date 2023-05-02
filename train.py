@@ -38,8 +38,8 @@ def train():
     running_reward = 0
     for i_episode in range(0, 10000):
         state = env.reset()
+        reward_per_episode = 0
         for t in range(10000):
-            reward_per_episode = 0
             # print(state)
             action = policy(state)
             # print("action", env.step(action))
@@ -48,7 +48,6 @@ def train():
             # reward = 10 * info["score"]
             if done:
                 reward = -10 * state[1]
-                print("y", info["playery"])
                 if info["playery"] > 380:
                     reward = -1000000000000
             policy.rewards.append(reward)
@@ -78,11 +77,13 @@ def train():
             print('Episode {}\tlength: {}\treward: {}'.format(i_episode, t, running_reward))
             running_reward = 0
     
-    with open('./preTrained/FlappyBird_rewards_{}.txt'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")), 'wb') as file:
-        pickle.dump(rewards_over_episodes, file)
+        if reward_per_episode > 1000000:
+            with open('./preTrained/FlappyBird_rewards_{}.txt'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")), 'wb') as file:
+                pickle.dump(rewards_over_episodes, file)
 
-    torch.save(policy.state_dict(), './preTrained/FlappyBird_{}.pth'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")))
-    print("########## Solved! ##########")
+            torch.save(policy.state_dict(), './preTrained/FlappyBird_{}.pth'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")))
+            print("########## Solved! ##########")
+            break
     # test(name='LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
             
 if __name__ == '__main__':
