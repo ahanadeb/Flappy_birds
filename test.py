@@ -6,9 +6,9 @@ import flappy_bird_gym
 
 from PIL import Image
 
-def test(n_episodes=5, name='LunarLander_2023-05-02_18_03_16_632264.pth'):
+def test(n_episodes=5, name='FlappyBird_2023-05-03_11_42_53_258562.pth'):
     env = flappy_bird_gym.make("FlappyBird-v0")
-    #env = gym.make('LunarLander-v2')
+    
     policy = ActorCritic()
     
     policy.load_state_dict(torch.load('./preTrained/{}'.format(name)))

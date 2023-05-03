@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import pickle
 
-FILENAME = "./preTrained/FlappyBird_rewards_2023-05-03_00_13_41_212170.txt"
+FILENAME = "./preTrained/FlappyBird_rewards_2023-05-03_11_42_53_241738.txt"
 
 with open(FILENAME, 'rb') as file:
     rewards_over_episodes = pickle.load(file)  

@@ -9,11 +9,6 @@ from datetime import datetime
 import pickle
 
 def train():
-    # Defaults parameters:
-    #    gamma = 0.99
-    #    lr = 0.02
-    #    betas = (0.9, 0.999)
-    #    random_seed = 543
 
     render = False
     gamma = 0.99
@@ -25,13 +20,10 @@ def train():
     env = flappy_bird_gym.make("FlappyBird-v0")
 
     print(env.action_space)
-    #env = gym.make('LunarLander-v2')
     env.seed(random_seed)
     
     policy = ActorCritic()
-    print(policy)
     optimizer = optim.Adam(policy.parameters(), lr=lr, betas=betas)
-    print(lr,betas)
 
     rewards_over_episodes = []
     
@@ -40,16 +32,19 @@ def train():
         state = env.reset()
         reward_per_episode = 0
         for t in range(10000):
-            # print(state)
             action = policy(state)
-            # print("action", env.step(action))
             state, reward, done, info = env.step(action)
+
+            # give low reward for coming far and high reward for each passed tube
+            # punishing being far away from the next tubes gap
             reward = 0.01 * t + 10 * info["score"] - 1 * state[1]
-            # reward = 10 * info["score"]
             if done:
+                # when failed punishing tries with higher distance to the gap
                 reward = -10 * state[1]
                 if info["playery"] > 380:
-                    reward = -1000000000000
+                    # punish hitting the ground with a high negative reward
+                    reward = -100
+
             policy.rewards.append(reward)
             running_reward += reward
             reward_per_episode += reward
@@ -68,23 +63,27 @@ def train():
         optimizer.step()        
         policy.clearMemory()
         
-        # saving the model if episodes > 999 OR avg reward > 200 
-        #if i_episode > 999:
-        #    torch.save(policy.state_dict(), './preTrained/LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
-
-        if i_episode % 100 == 0:
-            running_reward = running_reward/100
-            print('Episode {}\tlength: {}\treward: {}'.format(i_episode, t, running_reward))
-            running_reward = 0
-    
+        # count the good runs in a row
         if reward_per_episode > 1000000:
+            counter_good_runs_in_a_row += 1
+            print("good run number", counter_good_runs_in_a_row)
+        else:
+            # reset counter
+            counter_good_runs_in_a_row = 0
+
+        # save the model when there are 3 good runs in a row
+        if counter_good_runs_in_a_row >= 3:
             with open('./preTrained/FlappyBird_rewards_{}.txt'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")), 'wb') as file:
                 pickle.dump(rewards_over_episodes, file)
 
             torch.save(policy.state_dict(), './preTrained/FlappyBird_{}.pth'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")))
             print("########## Solved! ##########")
             break
-    # test(name='LunarLander_{}_{}_{}.pth'.format(lr, betas[0], betas[1]))
+
+        if i_episode % 100 == 0:
+            running_reward = running_reward/100
+            print('Episode {}\tlength: {}\treward: {}'.format(i_episode, t, running_reward))
+            running_reward = 0
             
 if __name__ == '__main__':
     train()
