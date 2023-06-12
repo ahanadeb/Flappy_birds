@@ -5,8 +5,8 @@ import numpy as np
 class net(th.nn.Module):
     def __init__(self):
         super(net,self).__init__()
-        self.fc1=th.nn.Linear(n_state,hidden)
-        self.out=th.nn.Linear(hidden,n_action)
+        self.fc1=th.nn.Linear(2,10)
+        self.out=th.nn.Linear(10,2)
     
 
     def forward(self,x):
