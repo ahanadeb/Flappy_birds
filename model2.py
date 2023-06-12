@@ -2,6 +2,11 @@ import torch as th
 import numpy as np
 
 
+gamma = 0.99
+lr = 0.02
+episilon=0.9
+
+
 class net(th.nn.Module):
     def __init__(self):
         super(net,self).__init__()
@@ -43,7 +48,7 @@ class Sarsa():
         return th.argmax(qs)
 
     def random_action(self):
-        return np.random.randint(0,n_action)
+        return np.random.randint(0,2)
 
     def choose_action(self,qs):
         if np.random.rand()>episilon:
