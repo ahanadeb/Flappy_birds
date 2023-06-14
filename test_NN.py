@@ -1,4 +1,4 @@
-from model import ActorCritic
+from NN import NN
 import torch
 import gym
 import time
@@ -9,7 +9,7 @@ from PIL import Image
 def test(n_episodes=5, name='FlappyBird_2023-05-03_11_42_53_258562.pth'):
     env = flappy_bird_gym.make("FlappyBird-v0")
     
-    policy = ActorCritic()
+    policy = NN()
     
     policy.load_state_dict(torch.load('./preTrained/{}'.format(name)))
     

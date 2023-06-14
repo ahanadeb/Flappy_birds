@@ -3,24 +3,18 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import Categorical
 
+# adapted from https://github.com/Talendar/flappy-bird-gym
+
 class ActorCritic(nn.Module):
     def __init__(self):
         super(ActorCritic, self).__init__()
-        # self.affine = nn.Linear(8, 128)
-        self.affine = nn.Linear(2, 64)
-        
-        # self.action_layer = nn.Linear(128, 4)
-        # self.value_layer = nn.Linear(128, 1)
-        self.action_layer = nn.Linear(64, 2)
-        self.value_layer = nn.Linear(64, 1)
         
         self.logprobs = []
         self.state_values = []
         self.rewards = []
 
     def forward(self, state):
-        state = torch.from_numpy(state).float()
-        state = F.relu(self.affine(state))
+        state = self.model(state)
         
         state_value = self.value_layer(state)
         

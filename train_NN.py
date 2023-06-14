@@ -1,5 +1,5 @@
-from test import test
-from model import ActorCritic
+from test_NN import test
+from NN import NN
 import torch
 import torch.optim as optim
 import gym
@@ -22,7 +22,7 @@ def train():
     print(env.action_space)
     env.seed(random_seed)
     
-    policy = ActorCritic()
+    policy = NN()
     optimizer = optim.Adam(policy.parameters(), lr=lr, betas=betas)
 
     rewards_over_episodes = []
