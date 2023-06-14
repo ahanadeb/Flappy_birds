@@ -1,5 +1,5 @@
 from test import test
-from model import ActorCritic
+from ac_online import ActorCritic
 import torch
 import torch.optim as optim
 import gym
@@ -31,7 +31,9 @@ def train():
     for i_episode in range(0, 10000):
         state = env.reset()
         reward_per_episode = 0
+       
         for t in range(10000):
+            
             action = policy(state)
             state, reward, done, info = env.step(action)
 
@@ -48,7 +50,18 @@ def train():
             policy.rewards.append(reward)
             running_reward += reward
             reward_per_episode += reward
-            if render and i_episode % 100 ==0:
+
+            # Updating the policy :
+            #if t%10 ==0:
+                #print("Ebe")
+            # if t>5:
+            #     optimizer.zero_grad()
+            #     loss = policy.calculateLoss(gamma)
+            #     loss.backward()
+            #     optimizer.step()        
+            #     policy.clearMemory() 
+                #print("done ONCE")
+            if render and i_episode % 100 < 10:
                 env.render()
                 time.sleep(1/30)
             if done:
@@ -56,12 +69,13 @@ def train():
 
         rewards_over_episodes.append(running_reward)
                     
-        # Updating the policy :
         optimizer.zero_grad()
         loss = policy.calculateLoss(gamma)
         loss.backward()
         optimizer.step()        
-        policy.clearMemory()
+        policy.clearMemory() 
+
+        
         
         # count the good runs in a row
         if reward_per_episode > 1000000:

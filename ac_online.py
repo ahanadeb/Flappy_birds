@@ -2,21 +2,25 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import Categorical
+import torch.optim as optim
 
+lr=0.001
+betas = (0.9, 0.999)
 class ActorCritic(nn.Module):
     def __init__(self):
         super(ActorCritic, self).__init__()
         # self.affine = nn.Linear(8, 128)
-        self.affine = nn.Linear(2, 2)
+        self.affine = nn.Linear(2, 64)
         
         # self.action_layer = nn.Linear(128, 4)
         # self.value_layer = nn.Linear(128, 1)
-        self.action_layer = nn.Linear(2, 2)
-        self.value_layer = nn.Linear(2, 1)
+        self.action_layer = nn.Linear(64, 2)
+        self.value_layer = nn.Linear(64, 1)
         
         self.logprobs = []
         self.state_values = []
         self.rewards = []
+        self.optimizer =  optim.Adam(self.parameters(), lr=lr, betas=betas)
 
     def forward(self, state):
         state = torch.from_numpy(state).float()
@@ -63,4 +67,9 @@ class ActorCritic(nn.Module):
         del self.state_values[:]
         del self.rewards[:]
 
+    def learn(self):
+        loss = self.calculateLoss()
+        loss.backward()
+        self.optimizer.step()        
+        self.clearMemory() 
 

@@ -3,8 +3,8 @@ import numpy as np
 
 
 gamma = 0.99
-lr = 0.02
-episilon=0.9
+lr = 0.01
+
 
 
 class net(th.nn.Module):
@@ -25,6 +25,7 @@ class Sarsa():
         self.net,self.target_net=net(),net()
         self.iter_num=0
         self.optimizer=th.optim.Adam(self.net.parameters(),lr=lr)
+        self.episilon=.5
 
     def learn(self,s,a,s_,r,done):
         eval_q=self.net(th.Tensor(s))[a]
