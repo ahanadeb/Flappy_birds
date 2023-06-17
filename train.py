@@ -28,7 +28,7 @@ def train():
     rewards_over_episodes = []
     
     running_reward = 0
-    for i_episode in range(0, 10000):
+    for i_episode in range(0, 5001):
         state = env.reset()
         reward_per_episode = 0
         for t in range(10000):
@@ -54,7 +54,7 @@ def train():
             if done:
                 break
 
-        rewards_over_episodes.append(running_reward)
+        rewards_over_episodes.append(reward_per_episode)
                     
         # Updating the policy :
         optimizer.zero_grad()
@@ -73,8 +73,8 @@ def train():
 
         # save the model when there are 3 good runs in a row
         #if counter_good_runs_in_a_row >= 1:
-        if i_episode == 9000:
-            with open('./preTrained/FlappyBird_rewards_{}.txt'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")), 'wb') as file:
+        if i_episode == 4999:
+            with open('./preTrained/10101FlappyBird_rewards_{}.txt'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")), 'wb') as file:
                 pickle.dump(rewards_over_episodes, file)
 
             torch.save(policy.state_dict(), './preTrained/FlappyBird_{}.pth'.format(str(datetime.now()).replace(" ", "_").replace(":", "_").replace(".", "_")))
