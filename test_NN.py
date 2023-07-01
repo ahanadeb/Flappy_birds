@@ -1,4 +1,4 @@
-from model import ActorCritic
+from NN import NN
 import torch
 import gym
 import time
@@ -6,10 +6,10 @@ import flappy_bird_gym
 
 from PIL import Image
 
-def test(n_episodes=5, name='LunarLander_TWO.pth'):
+def test(n_episodes=5, name='FlappyBird_2023-05-03_11_42_53_258562.pth'):
     env = flappy_bird_gym.make("FlappyBird-v0")
-    #env = gym.make('LunarLander-v2')
-    policy = ActorCritic()
+    
+    policy = NN()
     
     policy.load_state_dict(torch.load('./preTrained/{}'.format(name)))
     
@@ -25,6 +25,7 @@ def test(n_episodes=5, name='LunarLander_TWO.pth'):
             running_reward += reward
             if render:
                  env.render()
+                 time.sleep(1/30)
                  if save_gif:
                      img = env.render(mode = 'rgb_array')
                      img = Image.fromarray(img)

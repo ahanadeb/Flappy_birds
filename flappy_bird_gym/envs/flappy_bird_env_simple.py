@@ -141,7 +141,7 @@ class FlappyBirdEnvSimple(gym.Env):
         reward = 1
 
         done = not alive
-        info = {"score": self._game.score}
+        info = {"score": self._game.score, "playery": self._game.player_y}
 
         return obs, reward, done, info
 
